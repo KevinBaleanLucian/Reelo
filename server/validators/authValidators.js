@@ -27,3 +27,13 @@ export const registerSchema = z.object({
     country: z.string().trim().max(100).optional(),
 
 })
+
+export const loginSchema=z.object({
+    email: z.string().trim().toLowerCase().max(255)
+    .pipe(z.email('Enter a valid email address')),
+
+    password: z.string().min(1,'Enter your password').max(72,'Password is too long'),
+
+    rememberMe: z.boolean().optional().default(false),
+});
+

@@ -1,7 +1,23 @@
 import bcrypt from 'bcrypt';
 import pool from '../db/pool.js';
+import { signToken } from '../utils/jwt.js';
 
 const SALT_ROUNDS=12;
+
+const DUMMY_HASH=bcrypt.hashSync('dummy-password-for-timing',SALT_ROUNDS);
+
+function toPublicUser(row){
+    return {
+        id:row.id,
+        username:row.username,
+        firstName:row.first_name,
+        lastName:row.lastName,
+        email:row.email,
+        country:row.country,
+        createdAt:row.created_at,
+    };
+
+}
 
 export async function register(req,res){
     const {firstName, lastName, username, email, password, dateOfBirth, country}=req.body;
@@ -51,4 +67,61 @@ export async function register(req,res){
         }
         throw err;
     }
+}
+
+export async function login(req,res){
+    const {email,password,rememberMe}=req.body;
+
+    const result=await pool.query(
+        `SELECT id,username,first_name,last_name,email,country,created_at,password_hash
+        FROM users
+        WHERE email =$1`,
+        [email]
+    );
+    const user=result.rows[0];
+
+    const passwordMatches=await bcrypt.compare(
+        password, user ? user.password_hash : DUMMY_HASH
+    );
+    if(!user || !passwordMatches){
+        return res.status(401).json({message: 'Invalid email or password'});
+    }
+    const token=signToken(user.id, rememberMe ? process.env.JWT_EXPIRES_IN || '7d' : '1d');
+
+    return res.json({
+        token,
+        user:toPublicUser(user),
+    });
+
+
+}
+
+export async function getMe(req,res){
+    const result=await pool.query(
+        `SELECT id,username,first_name,last_name,email,date_of_birth,country,city,bio,avatar_url,favorite_title_id,created_at FROM users WHERE id=$1`,
+        [req.user.id]  
+    );
+
+    const row=result.rows[0];
+    if(!row){
+        return res.status(401).json({message: 'Invalid token'});
+
+    }
+    return res.json({
+    user: {
+      id: row.id,
+      username: row.username,
+      firstName: row.first_name,
+      lastName: row.last_name,
+      email: row.email,
+      dateOfBirth: row.date_of_birth,
+      country: row.country,
+      city: row.city,
+      bio: row.bio,
+      avatarUrl: row.avatar_url,
+      favoriteTitleId: row.favorite_title_id,
+      createdAt: row.created_at,
+    },
+ });
+
 }
