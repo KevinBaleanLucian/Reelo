@@ -26,6 +26,10 @@ export const registerSchema = z.object({
 
     country: z.string().trim().max(100).optional(),
 
+    genreIds: z.array(z.number().int().positive(), {error: 'Genres must be a lsit of ids'})
+    .max(12,'Select at most 12 genres')
+    .transform((ids)=> [...new Set(ids)]).default([]),
+
 })
 
 export const loginSchema=z.object({

@@ -19,9 +19,32 @@ function toPublicUser(row){
 
 }
 
-export async function register(req,res){
-    const {firstName, lastName, username, email, password, dateOfBirth, country}=req.body;
+async function getUserGenres(userId){
+    const result =await pool.query(
+        `SELECT g.id, g.tmdb_id, g.name
+        FROM user_genres ug
+        JOIN genres g ON g.id = ug.genre_id
+        WHERE ug.user_id = $1
+        ORDER BY g.name`,
+        [userId]
+    );
+    return result.rows.map((g)=> ({id: g.id, tmdbId:g.tmdb_id, name:g.name}));
+}
 
+export async function register(req,res){
+    const { firstName, lastName, username, email, password, dateOfBirth, country, genreIds } = req.body;
+
+    if(genreIds.length>0){
+        const found =await pool.query('SELECT id FROM genres WHERE id = ANY($1::int[])',[genreIds]);
+
+        if (found.rows.length !== genreIds.length){
+            return res.status(400).json({
+                message: 'Validation failed',
+                errors: {genreIds: 'One or more genres are invalid'},
+            });
+
+        }
+    }
     const existing=await pool.query(
         'SELECT email, username FROM users WHERE email = $1 OR username = $2',
         [email,username]
@@ -29,43 +52,48 @@ export async function register(req,res){
 
     if(existing.rows.length>0){
         const errors={};
-        for(const row of existing.rows){
-            if (row.email === email) errors.email = 'This email is already registered';
+        for (const row of existing.rows){
+            if (row.email===email) errors.email = 'This email is already registered';
             if (row.username === username) errors.username = 'This username is taken';
         }
-        return res.status(409).json({message: 'Account already exists',errors});
+        return res.status(409).json({ message: 'Account already exists', errors });
     }
+    const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+    const client = await pool.connect();
+    try{
+        await client.query('BEGIN');
 
-    const passwordHash=await bcrypt.hash(password,SALT_ROUNDS);
+        const result = await client.query(
+            `INSERT INTO users
+                (username, first_name, last_name, email, password_hash, date_of_birth, country)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
+            RETURNING id, username, first_name, last_name, email, country, created_at`,
+            [username, firstName, lastName, email, passwordHash, dateOfBirth ?? null, country || null]
+        );
+        const user=result.rows[0];
 
-    try {
-    const result = await pool.query(
-      `INSERT INTO users
-         (username, first_name, last_name, email, password_hash, date_of_birth, country)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
-       RETURNING id, username, first_name, last_name, email, country, created_at`,
-      [username, firstName, lastName, email, passwordHash, dateOfBirth ?? null, country || null]
-    );
+        if(genreIds.length>0){
+            await client.query(
+                `INSERT INTO user_genres (user_id, genre_id)
+                SELECT $1, UNNEST($2::int[])`,
+                [user.id,genreIds]
+            );
+        }
 
-    const user=result.rows[0];
+        await client.query('COMMIT');
 
-    return res.status(201).json({
-        user: {
-            id: user.id,
-            username: user.username,
-            firstName: user.first_name,
-            lastName: user.last_name,
-            email: user.email,
-            country: user.country,
-            createdAt: user.created_at,
-        },
-    });
-
+        return res.status(201).json({
+            user: {...toPublicUser(user), genres: await getUserGenres(user.id)},
+        });
     } catch (err){
+        await client.query('ROLLBACK');
+
         if(err.code==='23505'){
-            return res.status(409).json({message:'Account already exists'});
+            return res.status(409).json({message: 'Account already exists'});
         }
         throw err;
+    } finally {
+        client.release();
     }
 }
 
@@ -121,6 +149,7 @@ export async function getMe(req,res){
       avatarUrl: row.avatar_url,
       favoriteTitleId: row.favorite_title_id,
       createdAt: row.created_at,
+      genres: await getUserGenres(row.id),
     },
  });
 

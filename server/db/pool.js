@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+pg.types.setTypeParser(1082,(value)=>value);
+
 const pool=new pg.Pool({
     host:process.env.DB_HOST,
     port:process.env.DB_PORT,
