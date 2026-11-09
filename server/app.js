@@ -4,7 +4,8 @@ import dotenv from 'dotenv';
 import healthRoutes from './routes/healthRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import genreRoutes from './routes/genreRoutes.js';
-import titleRoutes from './routes/titleRoutes.js'
+import titleRoutes from './routes/titleRoutes.js';
+import { notFound, errorHandler } from './middleware/errorHandler.js';
 
 dotenv.config();
 
@@ -17,10 +18,9 @@ app.use('/api/health',healthRoutes);
 app.use('/api/auth',authRoutes);
 app.use('/api/genres',genreRoutes);
 app.use('/api/titles',titleRoutes);
-app.use((req,res)=>{
-    res.status(404).json({message: 'Route not found'});
 
-});
+app.use(notFound);
+app.use(errorHandler);
 
 
 export default app;

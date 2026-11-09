@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "sync:genres": "node scripts/syncGenres.js"
+    "sync:genres": "node scripts/syncGenres.js",
+    "test:smoke": "node scripts/smokeTest.js"
   },
   "keywords": [],
   "author": "",
