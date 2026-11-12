@@ -160,3 +160,18 @@ export async function searchTitles(query,page){
     };
 }
 
+export async function trendingTitles(type,page){
+    const data= await tmdbFetch(`/trending/${type}/week`,{page});
+    const results=data.results.map((item) => ({
+        item,
+        mediaType: item.media_type || (type==='all' ? null : type),
+    }))
+    .filter(({mediaType}) => mediaType ==='movie' || mediaType==='tv')
+    .map(({item,mediaType}) => normalizeListItem(item,mediaType));
+
+    return {
+        page:data.page,
+        totalPages: Math.min(data.total_pages,500),
+        results,
+    };
+}

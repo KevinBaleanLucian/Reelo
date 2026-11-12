@@ -52,3 +52,27 @@ export function YouTubeIcon(props) {
     </Svg>
   );
 }
+
+export function StarIcon(props) {
+  return (
+    <Svg {...props}>
+      <path d="m12 3 2.8 5.8 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 3 1.1-6.2L3 9.7l6.2-.9L12 3Z" />
+    </Svg>
+  );
+}
+
+export function PlusIcon(props) {
+  return (
+    <Svg {...props}>
+      <path d="M12 5v14M5 12h14" />
+    </Svg>
+  );
+}
+
+export function ArrowUpRightIcon(props) {
+  return (
+    <Svg {...props}>
+      <path d="M7 17 17 7M8 7h9v9" />
+    </Svg>
+  );
+}

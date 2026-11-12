@@ -1,36 +1,92 @@
-import { Link } from 'react-router';
-import Card from '../components/Card.jsx';
+import { useState } from 'react';
+import Button from '../components/Button.jsx';
+import FilterTabs from '../components/FilterTabs.jsx';
+import Hero from '../components/Hero.jsx';
+import HeroSkeleton from '../components/HeroSkeleton.jsx';
+import TitleRow from '../components/TitleRow.jsx';
+import { ArrowUpRightIcon } from '../components/Icons.jsx';
+import { useGenreMap } from '../hooks/useGenreMap.js';
+import { useTitleList } from '../hooks/useTitleList.js';
+import './HomePage.css';
+
+const typeOptions = [
+  { value: 'all', label: 'All titles' },
+  { value: 'movie', label: 'Movies' },
+  { value: 'tv', label: 'Series' },
+];
 
 function HomePage() {
+  const [trendingType, setTrendingType] = useState('all');
+  const genreMap = useGenreMap();
+  const popular = useTitleList('popular', 'movie', 20);
+
+  const featured =
+    popular.items.find((movie) => movie.backdropPath && movie.overview) || popular.items[0];
+
   return (
-    <div
-      className="container"
-      style={{ paddingBlock: 'var(--space-7)', display: 'grid', gap: 'var(--space-5)', maxWidth: 560 }}
-    >
-      <Card as="article">
-        <p style={{ fontWeight: 500 }}>The Last Horizon</p>
-        <p style={{ color: 'var(--color-text-secondary)', marginTop: 'var(--space-2)' }}>
-          The kind of science fiction that remembers to be human.
-        </p>
-      </Card>
+    <>
+      {popular.status === 'loading' && <HeroSkeleton />}
 
-      <Card padding="lg">
-        <p className="eyebrow">The person behind the picks</p>
-        <h2 style={{ fontSize: 'var(--text-xl)', marginTop: 'var(--space-3)' }}>About Kevin</h2>
-      </Card>
+      {popular.status === 'error' && (
+        <section className="container home__hero-error" role="alert">
+          <p>We couldn’t load today’s featured film.</p>
+          <Button variant="secondary" onClick={popular.retry}>
+            Try again
+          </Button>
+        </section>
+      )}
 
-      <Card as={Link} to="/profile/oliverk" interactive>
-        <p style={{ fontWeight: 500 }}>Oliver Kim</p>
-        <p style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--text-sm)' }}>
-          12 films in common
-        </p>
-      </Card>
+      {popular.status === 'ready' && featured && <Hero item={featured} genreMap={genreMap} />}
 
-      <Card padding="none">
-        <div style={{ background: 'var(--color-field)', height: 80 }} />
-        <p style={{ padding: 'var(--space-4)' }}>A card without padding</p>
-      </Card>
-    </div>
+      <div className="container home__sections">
+        <TitleRow
+          eyebrow="Trending this week"
+          title="Worth the hype."
+          linkTo="/movies"
+          linkLabel="Explore all titles"
+          source="trending"
+          type={trendingType}
+          genreMap={genreMap}
+          filters={
+            <FilterTabs
+              label="Filter trending titles"
+              options={typeOptions}
+              value={trendingType}
+              onChange={setTrendingType}
+            />
+          }
+        />
+
+        <TitleRow
+          eyebrow="One more episode"
+          title="Get lost in a great series."
+          linkTo="/series"
+          linkLabel="Explore all series"
+          source="top-rated"
+          type="tv"
+          limit={3}
+          variant="wide"
+          genreMap={genreMap}
+        />
+
+        <section className="home__cta">
+          <div>
+            <h2 className="home__cta-title">Good taste deserves a home.</h2>
+            <p className="home__cta-text">
+              Save your discoveries. Build your watchlist. Find your next favorite.
+            </p>
+          </div>
+
+          <div className="home__cta-action">
+            <p className="home__cta-note">For the love of cinema. Always free.</p>
+            <Button to="/signup">
+              <ArrowUpRightIcon size={18} />
+              Join Reelo
+            </Button>
+          </div>
+        </section>
+      </div>
+    </>
   );
 }
 

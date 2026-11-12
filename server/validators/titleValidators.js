@@ -21,3 +21,10 @@ export const detailSchemas={
     }),
 };
 
+export const trendingSchemas={
+    query: z.object({
+        type: z.enum(['all','movie','tv'], {error: 'Type must be all, movie or tv'}).default('all'),
+        page,
+    }),
+};
+

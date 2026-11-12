@@ -1,4 +1,4 @@
-import { getTitle, listTitles, searchTitles } from '../services/titleService.js';
+import { getTitle, listTitles, searchTitles,trendingTitles } from '../services/titleService.js';
 
 export async function popular(req, res) {
   const { type } = req.valid.params;
@@ -21,3 +21,9 @@ export async function detail(req, res) {
   const { type, id } = req.valid.params;
   res.json({ title: await getTitle(id, type) });
 }
+
+export async function trending(req,res){
+  const {type,page} =req.valid.query;
+  res.json(await trendingTitles(type,page));
+}
+

@@ -1,0 +1,40 @@
+.filter-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.filter-tabs__tab{
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-pill);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease;
+}
+
+.filter-tabs__tab--active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-on-accent);
+}
+
+.filter-tabs__tab:focus-visible {
+  outline: 2px solid transparent;
+  box-shadow:
+    0 0 0 2px var(--color-bg),
+    0 0 0 4px var(--color-accent);
+}
+
+@media (hover: hover){
+    .filter-tabs__tab:not(.filter-tabs__tab--active):hover {
+        border-color: var(--color-border);
+        color: var(--color-text);
+    }
+}
+

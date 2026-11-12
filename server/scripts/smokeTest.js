@@ -108,6 +108,13 @@ try {
   check('Empty search returns 400', r.status === 400 && Boolean(r.data.errors?.q));
   r = await call('GET', '/titles/movie/popular?page=501');
   check('Page 501 returns 400', r.status === 400);
+  r=await call('GET','/titles/trending');
+  check(
+    'Trending returns only movies and series',
+    r.status===200 && r.data.results.length>0 && r.data.results.every((x)=> x.mediaType==='movie' || x.mediaType==='tv')
+  );
+  r=await call('GET','/titles/trending?type=person');
+  check('Invalid trending type returns 400',r.status===400 && Boolean(r.data.errors?.type));
   r = await call('GET', '/titles/movie/550');
   check('Movie details return runtime and genres', r.status === 200 && r.data.title.runtime > 0 && r.data.title.genres.length > 0);
   r = await call('GET', '/titles/tv/1396');
