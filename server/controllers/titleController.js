@@ -1,4 +1,4 @@
-import { getTitle, listTitles, searchTitles,trendingTitles } from '../services/titleService.js';
+import { getTitle, listTitles, searchTitles,trendingTitles,discoverTitles,listGenresForType } from '../services/titleService.js';
 
 export async function popular(req, res) {
   const { type } = req.valid.params;
@@ -26,4 +26,17 @@ export async function trending(req,res){
   const {type,page} =req.valid.query;
   res.json(await trendingTitles(type,page));
 }
+
+export async function discover(req,res){
+  const {type}=req.valid.params;
+  const { genre, year, sort, rating, runtime, lang, page } = req.valid.query;
+  res.json(await discoverTitles(type, { genre, year, sort, rating, runtime, lang, page }));
+}
+
+export async function typeGenres(req,res){
+  const {type}=req.valid.params;
+  res.json({genres: await listGenresForType(type)});
+}
+
+
 

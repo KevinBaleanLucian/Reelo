@@ -17,7 +17,7 @@ function Svg({children, size=20, ...props}) {
     );
 }
 
-export function SearchIcons (props) {
+export function SearchIcon (props) {
     return (
         <Svg {...props}>
             <circle cx="11" cy="11" r="7" />
@@ -26,7 +26,7 @@ export function SearchIcons (props) {
     );
 }
 
-export function BookmarkIcons(props) {
+export function BookmarkIcon(props) {
     return (
         <Svg {...props}>
             <path d="M6 3h12v18l-6-4-6 4V3Z" />
@@ -73,6 +73,57 @@ export function ArrowUpRightIcon(props) {
   return (
     <Svg {...props}>
       <path d="M7 17 17 7M8 7h9v9" />
+    </Svg>
+  );
+}
+
+export function ChevronLeftIcon(props) {
+  return (
+    <Svg {...props}>
+      <path d="m15 18-6-6 6-6" />
+    </Svg>
+  );
+}
+
+export function ChevronRightIcon(props) {
+  return (
+    <Svg {...props}>
+      <path d="m9 18 6-6-6-6" />
+    </Svg>
+  );
+}
+
+export function SlidersIcon(props) {
+  return (
+    <Svg {...props}>
+      <path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1" />
+      <circle cx="15" cy="6" r="2" />
+      <circle cx="9" cy="12" r="2" />
+      <circle cx="17" cy="18" r="2" />
+    </Svg>
+  );
+}
+
+export function ChevronDownIcon(props) {
+  return (
+    <Svg {...props}>
+      <path d="m6 9 6 6 6-6" />
+    </Svg>
+  );
+}
+
+export function CheckIcon(props) {
+  return (
+    <Svg {...props}>
+      <path d="m5 12.5 4.5 4.5L19 7.5" />
+    </Svg>
+  );
+}
+
+export function XIcon(props) {
+  return (
+    <Svg {...props}>
+      <path d="M6 6l12 12M18 6 6 18" />
     </Svg>
   );
 }

@@ -175,3 +175,70 @@ export async function trendingTitles(type,page){
         results,
     };
 }
+
+const SORT_FIELDS ={
+    popularity: ()=>'popularity.desc',
+    rating: ()=>'vote_average.desc',
+    newest: (mediaType) =>
+        mediaType ==='movie' ? 'primary_release_date.desc' : 'first_air_date.desc',
+};
+
+const RUNTIME_RANGES = {
+    short: {lte: 90},
+    medium: {gte: 90,lte:120},
+    long: {gte: 120},
+};
+
+const MIN_VOTES= {movie: 200,tv:100};
+
+export async function discoverTitles(
+  mediaType,
+  { genre, year, sort = 'popularity', rating, runtime, lang, page }
+) {
+  const dateField = mediaType === 'movie' ? 'primary_release_date' : 'first_air_date';
+
+  const params = {
+    page,
+    sort_by: SORT_FIELDS[sort](mediaType),
+    include_adult: 'false',
+    with_genres: genre,
+    with_original_language: lang,
+  };
+
+  if (year) {
+    params[mediaType === 'movie' ? 'primary_release_year' : 'first_air_date_year'] = year;
+  }
+
+  if (rating) params['vote_average.gte'] = rating;
+  if (rating || sort === 'rating') params['vote_count.gte'] = MIN_VOTES[mediaType];
+  if (sort === 'newest') params[`${dateField}.lte`] = new Date().toISOString().slice(0, 10);
+
+  if (runtime && mediaType === 'movie') {
+    const range = RUNTIME_RANGES[runtime];
+    if (range.gte) params['with_runtime.gte'] = range.gte;
+    if (range.lte) params['with_runtime.lte'] = range.lte;
+  }
+
+  const data = await tmdbFetch(`/discover/${mediaType}`, params);
+
+  return {
+    page: data.page,
+    totalPages: Math.min(data.total_pages, 500),
+    results: data.results.map((item) => normalizeListItem(item, mediaType)),
+  };
+}
+const GENRES_TTL_MS = 24 * 60 * 60 * 1000;
+const genreCache = new Map();
+
+export async function listGenresForType(mediaType) {
+  const cached = genreCache.get(mediaType);
+  if (cached && Date.now() - cached.at < GENRES_TTL_MS) {
+    return cached.genres;
+  }
+
+  const data = await tmdbFetch(`/genre/${mediaType}/list`);
+  const genres = data.genres.map((g) => ({ tmdbId: g.id, name: g.name }));
+
+  genreCache.set(mediaType, { genres, at: Date.now() });
+  return genres;
+}

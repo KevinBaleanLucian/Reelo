@@ -1,0 +1,16 @@
+.search-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding-block: var(--space-7);
+}
+
+.search-page__title {
+  margin-top: var(--space-2);
+  font-size: var(--text-3xl);
+  overflow-wrap: anywhere;
+}
+
+.search-page__prompt {
+  color: var(--color-text-secondary);
+}

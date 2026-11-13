@@ -1,6 +1,7 @@
 import api from "./api.js";
-
+import { getTypeGenres } from "./titleApi.js";
 let cache=null;
+const typeCache=new Map();
 
 export function getGenreMap(){
     if(!cache){
@@ -18,3 +19,16 @@ export function getGenreMap(){
     }
     return cache;
 }
+
+export function getTypeGenreList(type){
+    if(!typeCache.has(type)) {
+        const promise=getTypeGenres(type).catch((error) => {
+            typeCache.delete(type);
+            throw error;
+        });
+        typeCache.set(type,promise);
+    }
+
+    return typeCache.get(type);
+}
+

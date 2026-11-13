@@ -64,7 +64,6 @@ function HomePage() {
           linkLabel="Explore all series"
           source="top-rated"
           type="tv"
-          limit={3}
           variant="wide"
           genreMap={genreMap}
         />

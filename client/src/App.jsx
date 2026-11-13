@@ -8,7 +8,8 @@ import ProfilePage from './pages/ProfilePage.jsx';
 import WatchlistPage from './pages/WatchlistPage.jsx';
 import ChatPage from './pages/ChatPage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
-
+import BrowsePage from './pages/BrowsePage.jsx';
+import SearchPage from './pages/SearchPage.jsx';
 function App() {
   return (
     <Routes>
@@ -19,6 +20,9 @@ function App() {
         <Route path="/watchlist" element={<WatchlistPage />} />
         <Route path="/chat" element={<ChatPage />} />
         <Route path="*" element={<NotFoundPage />} />
+        <Route path="/search" element={<SearchPage />} />
+        <Route path="/movies" element={<BrowsePage key="movie" type="movie" />} />
+        <Route path="/series" element={<BrowsePage key="tv" type="tv" />} />
       </Route>
 
       <Route path="/login" element={<LoginPage />} />

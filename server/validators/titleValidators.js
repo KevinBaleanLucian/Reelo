@@ -28,3 +28,22 @@ export const trendingSchemas={
     }),
 };
 
+export const discoverSchemas = {
+  params: z.object({ type: mediaType }),
+  query: z.object({
+    genre: z.coerce.number().int().positive('Invalid genre').optional(),
+    year: z.coerce.number().int().min(1900, 'Invalid year').max(2100, 'Invalid year').optional(),
+    sort: z
+      .enum(['popularity', 'rating', 'newest'], { error: 'Invalid sort' })
+      .default('popularity'),
+    rating: z.coerce.number().int().min(1, 'Invalid rating').max(9, 'Invalid rating').optional(),
+    runtime: z.enum(['short', 'medium', 'long'], { error: 'Invalid runtime' }).optional(),
+    lang: z.string().regex(/^[a-z]{2}$/, 'Invalid language').optional(),
+    page,
+  }),
+};
+
+export const typeSchemas = {
+  params: z.object({ type: mediaType }),
+};
+

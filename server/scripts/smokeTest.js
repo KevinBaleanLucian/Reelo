@@ -95,6 +95,20 @@ try {
   check('/me returns the genres and no hash', r.data?.user?.genres?.length === 3 && !JSON.stringify(r.data).includes('password'));
 
   console.log('Titles');
+    r = await call('GET', '/titles/movie/discover?genre=878');
+  check(
+    'Discover by genre returns matching movies',
+    r.status === 200 &&
+      r.data.results.length > 0 &&
+      r.data.results.every((x) => x.genreIds.includes(878))
+  );
+  r = await call('GET', '/titles/tv/genres');
+  check(
+    'Series genres include Sci-Fi & Fantasy',
+    r.status === 200 && r.data.genres.some((g) => g.tmdbId === 10765)
+  );
+  r = await call('GET', '/titles/movie/discover?year=1800');
+  check('Invalid year returns 400', r.status === 400 && Boolean(r.data.errors?.year));
   r = await call('GET', '/titles/movie/popular');
   check('Popular movies returns 20 results', r.status === 200 && r.data.results.length === 20);
   r = await call('GET', '/titles/tv/popular?page=2');

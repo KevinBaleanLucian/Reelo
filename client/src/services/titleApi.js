@@ -24,3 +24,15 @@ export async function getTitleDetails(type,id){
     const {data} = await api.get(`/titles/${type}/${id}`);
     return data.title;
 }
+
+export async function getDiscover(type, { genre, year, sort, rating, runtime, lang, page = 1 } = {}) {
+  const { data } = await api.get(`/titles/${type}/discover`, {
+    params: { genre, year, sort, rating, runtime, lang, page },
+  });
+  return data;
+}
+
+export async function getTypeGenres(type) {
+    const {data} = await api.get(`/titles/${type}/genres`);
+    return data.genres;
+}
