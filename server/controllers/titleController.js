@@ -1,4 +1,5 @@
 import { getTitle, listTitles, searchTitles,trendingTitles,discoverTitles,listGenresForType } from '../services/titleService.js';
+import { getTitleExtras } from '../services/titleExtrasService.js';
 
 export async function popular(req, res) {
   const { type } = req.valid.params;
@@ -36,6 +37,12 @@ export async function discover(req,res){
 export async function typeGenres(req,res){
   const {type}=req.valid.params;
   res.json({genres: await listGenresForType(type)});
+}
+
+export async function extras(req, res) {
+  const { type, id } = req.valid.params;
+  const { region } = req.valid.query;
+  res.json({ extras: await getTitleExtras(id, type, region) });
 }
 
 

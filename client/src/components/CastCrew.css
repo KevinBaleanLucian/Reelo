@@ -1,0 +1,51 @@
+.cast-crew__list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-6) var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cast-crew__person {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.cast-crew__photo {
+  width: 3.75rem;
+  height: 4.5rem;
+  margin-bottom: var(--space-2);
+  background: var(--color-field);
+  border-radius: var(--radius-button);
+  object-fit: cover;
+}
+
+.cast-crew__photo--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.cast-crew__name {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.cast-crew__role {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.cast-crew__empty {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}

@@ -47,3 +47,10 @@ export const typeSchemas = {
   params: z.object({ type: mediaType }),
 };
 
+export const extrasSchemas={
+    params: detailSchemas.params,
+    query: z.object({
+        region: z.string().trim().toUpperCase().regex(/^[A-Z]{2}$/, 'Invalid region').optional(),
+    }),
+};
+

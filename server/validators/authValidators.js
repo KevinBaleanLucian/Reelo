@@ -1,5 +1,7 @@
 import {z} from 'zod';
 
+
+const regionNames= new Intl.DisplayNames(['en'], {type: 'region', fallback:'none'});
 export const registerSchema = z.object({
     firstName:z.string().trim().min(1,'First name is required').max(50,'First name is too long'),
     lastName: z.string().trim().min(1,'Last name is required').max(50,'Last name is too long'),
@@ -24,7 +26,7 @@ export const registerSchema = z.object({
     .refine((value) => new Date(value) >= new Date('1900-01-01'), 'Enter a valid date')
     .optional(),
 
-    country: z.string().trim().max(100).optional(),
+    country: z.string().trim().toUpperCase().regex(/^[A-Z]{2}$/, 'Select a valid country').refine((code) => code !== 'ZZ' && regionNames.of(code) !== undefined, 'Select a valid country').optional(),
 
     genreIds: z.array(z.number().int().positive(), {error: 'Genres must be a lsit of ids'})
     .max(12,'Select at most 12 genres')

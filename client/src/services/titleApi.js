@@ -36,3 +36,8 @@ export async function getTypeGenres(type) {
     const {data} = await api.get(`/titles/${type}/genres`);
     return data.genres;
 }
+
+export async function getTitleExtras(type, id, region) {
+  const { data } = await api.get(`/titles/${type}/${id}/extras`, { params: { region } });
+  return data.extras;
+}

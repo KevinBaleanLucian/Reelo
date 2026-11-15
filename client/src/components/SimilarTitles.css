@@ -1,0 +1,6 @@
+.similar__subtitle {
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
