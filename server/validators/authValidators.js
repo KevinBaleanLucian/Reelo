@@ -32,6 +32,11 @@ export const registerSchema = z.object({
     .max(12,'Select at most 12 genres')
     .transform((ids)=> [...new Set(ids)]).default([]),
 
+    favoriteTitle: z.object({
+        tmdbId: z.number().int().positive(),
+        mediaType: z.enum(['movie','tv'], {error: 'Invalid media type'}),
+    }).optional(),
+
 })
 
 export const loginSchema=z.object({

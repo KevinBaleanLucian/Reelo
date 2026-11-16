@@ -1,33 +1,49 @@
-import { Routes, Route } from 'react-router';
+import { Routes, Route, useLocation } from 'react-router';
+import AuthDrawer from './components/AuthDrawer.jsx';
 import MainLayout from './components/MainLayout.jsx';
-import HomePage from './pages/HomePage.jsx';
-import LoginPage from './pages/LoginPage.jsx';
-import SignUpPage from './pages/SignUpPage.jsx';
-import TitleDetailsPage from './pages/TitleDetailsPage.jsx';
-import ProfilePage from './pages/ProfilePage.jsx';
-import WatchlistPage from './pages/WatchlistPage.jsx';
-import ChatPage from './pages/ChatPage.jsx';
-import NotFoundPage from './pages/NotFoundPage.jsx';
 import BrowsePage from './pages/BrowsePage.jsx';
+import ChatPage from './pages/ChatPage.jsx';
+import HomePage from './pages/HomePage.jsx';
+import NotFoundPage from './pages/NotFoundPage.jsx';
+import ProfilePage from './pages/ProfilePage.jsx';
 import SearchPage from './pages/SearchPage.jsx';
-function App() {
-  return (
-    <Routes>
-      <Route element={<MainLayout />}>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/title/:type/:id" element={<TitleDetailsPage />} />
-        <Route path="/profile/:username" element={<ProfilePage />} />
-        <Route path="/watchlist" element={<WatchlistPage />} />
-        <Route path="/chat" element={<ChatPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-        <Route path="/search" element={<SearchPage />} />
-        <Route path="/movies" element={<BrowsePage key="movie" type="movie" />} />
-        <Route path="/series" element={<BrowsePage key="tv" type="tv" />} />
-      </Route>
+import TitleDetailsPage from './pages/TitleDetailsPage.jsx';
+import WatchlistPage from './pages/WatchlistPage.jsx';
+import RequireAuth from './components/RequireAuth.jsx';
 
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/signup" element={<SignUpPage />} />
-    </Routes>
+const AUTH_PATHS = ['/login', '/signup'];
+const HOME = { pathname: '/', search: '', hash: '' };
+
+function App() {
+  const location = useLocation();
+  const onAuthPage = AUTH_PATHS.includes(location.pathname);
+
+  const stored = location.state?.background;
+  const background = onAuthPage ? stored && !AUTH_PATHS.includes(stored.pathname)
+      ? stored
+      : HOME
+    : location;
+
+  return (
+    <>
+      <Routes location={background}>
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/movies" element={<BrowsePage key="movie" type="movie" />} />
+          <Route path="/series" element={<BrowsePage key="tv" type="tv" />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/title/:type/:id" element={<TitleDetailsPage />} />
+          <Route path="/profile/:username" element={<ProfilePage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+        <Route element={<RequireAuth />}>
+          <Route path="/watchlist" element={<WatchlistPage />} />
+          <Route path="/chat" element={<ChatPage />} />
+        </Route>
+      </Routes>
+
+      {onAuthPage && <AuthDrawer />}
+    </>
   );
 }
 

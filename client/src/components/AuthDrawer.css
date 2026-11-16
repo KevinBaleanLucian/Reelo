@@ -1,0 +1,152 @@
+.auth-drawer {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--color-text);
+  animation: auth-backdrop-in 0.25s ease-out;
+}
+
+.auth-drawer::backdrop {
+  background: transparent;
+}
+
+.auth-drawer__backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: default;
+}
+
+.auth-drawer__panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(100%, max(50vw, 32rem));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--color-bg);
+  border-left: 1px solid var(--color-border-subtle);
+  box-shadow: -24px 0 60px rgba(0, 0, 0, 0.5);
+  animation: auth-panel-in 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.auth-drawer__header {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--navbar-height);
+  padding-inline: var(--space-7);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.auth-drawer__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: none;
+  border: 0;
+  border-radius: var(--radius-pill);
+  color: var(--color-text-secondary);
+  transition: color 0.15s ease;
+}
+
+.auth-drawer__close:focus-visible {
+  outline: 2px solid transparent;
+  box-shadow:
+    0 0 0 2px var(--color-bg),
+    0 0 0 4px var(--color-accent);
+}
+
+.auth-drawer__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: var(--space-7);
+}
+
+.auth-drawer__body > * {
+  width: 100%;
+  max-width: 28rem;
+  margin-block: auto;
+  margin-inline: auto;
+}
+
+.auth-drawer__footer {
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3) var(--space-5);
+  padding: var(--space-5) var(--space-7);
+  border-top: 1px solid var(--color-border-subtle);
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+
+.auth-drawer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.auth-drawer--closing {
+  animation: auth-backdrop-out 0.2s ease-in forwards;
+}
+
+.auth-drawer--closing .auth-drawer__panel {
+  animation: auth-panel-out 0.2s ease-in forwards;
+}
+
+html.scroll-locked {
+  overflow: hidden;
+}
+
+@keyframes auth-backdrop-in {
+  from {
+    background: rgba(0, 0, 0, 0);
+  }
+}
+
+@keyframes auth-backdrop-out {
+  to {
+    background: rgba(0, 0, 0, 0);
+  }
+}
+
+@keyframes auth-panel-in {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes auth-panel-out {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (hover: hover) {
+  .auth-drawer__close:hover,
+  .auth-drawer__legal a:hover {
+    color: var(--color-text);
+  }
+}

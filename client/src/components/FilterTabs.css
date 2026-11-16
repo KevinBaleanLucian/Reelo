@@ -38,3 +38,31 @@
     }
 }
 
+.auth-drawer__body > .auth-form--wide {
+  max-width: 36rem;
+}
+
+.auth-form__row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.auth-form__legal {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+.auth-form__legal a {
+  color: var(--color-text);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+@media (hover: hover) {
+  .auth-form__legal a:hover {
+    color: var(--color-accent);
+  }
+}
+

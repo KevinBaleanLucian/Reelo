@@ -8,7 +8,7 @@ function MainLayout() {
     return (
         <>
           <ScrollToTop />
-          <Navbar watchlistCount={4} />
+          <Navbar/>
           <main className="main">
             <Outlet />
           </main>

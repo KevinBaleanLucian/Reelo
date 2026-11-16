@@ -7,6 +7,8 @@ import TitleRow from '../components/TitleRow.jsx';
 import { ArrowUpRightIcon } from '../components/Icons.jsx';
 import { useGenreMap } from '../hooks/useGenreMap.js';
 import { useTitleList } from '../hooks/useTitleList.js';
+import { useAuthLinkState } from '../hooks/useAuthLinkState.js';
+import { useAuth } from '../hooks/useAuth.js';
 import './HomePage.css';
 
 const typeOptions = [
@@ -16,9 +18,11 @@ const typeOptions = [
 ];
 
 function HomePage() {
+  const authState=useAuthLinkState();
   const [trendingType, setTrendingType] = useState('all');
   const genreMap = useGenreMap();
   const popular = useTitleList('popular', 'movie', 20);
+  const {status: authStatus}=useAuth();
 
   const featured =
     popular.items.find((movie) => movie.backdropPath && movie.overview) || popular.items[0];
@@ -67,23 +71,24 @@ function HomePage() {
           variant="wide"
           genreMap={genreMap}
         />
+        {authStatus==='anonymous' && (
+          <section className="home__cta">
+            <div>
+              <h2 className="home__cta-title">Good taste deserves a home.</h2>
+              <p className="home__cta-text">
+                Save your discoveries. Build your watchlist. Find your next favorite.
+              </p>
+            </div>
 
-        <section className="home__cta">
-          <div>
-            <h2 className="home__cta-title">Good taste deserves a home.</h2>
-            <p className="home__cta-text">
-              Save your discoveries. Build your watchlist. Find your next favorite.
-            </p>
-          </div>
-
-          <div className="home__cta-action">
-            <p className="home__cta-note">For the love of cinema. Always free.</p>
-            <Button to="/signup">
-              <ArrowUpRightIcon size={18} />
-              Join Reelo
-            </Button>
-          </div>
-        </section>
+            <div className="home__cta-action">
+              <p className="home__cta-note">For the love of cinema. Always free.</p>
+              <Button to="/signup" state={authState}>
+                <ArrowUpRightIcon size={18} />
+                Join Reelo
+              </Button>
+            </div>
+          </section>
+        )}
       </div>
     </>
   );

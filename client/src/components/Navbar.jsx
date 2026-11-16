@@ -2,7 +2,11 @@ import { Link, NavLink } from 'react-router';
 import Button from './Button.jsx';
 import Logo from './Logo.jsx';
 import NavbarSearch from './NavbarSearch.jsx';
+import UserMenu from './UserMenu.jsx';
 import { BookmarkIcon } from './Icons.jsx';
+import { useAuth } from '../hooks/useAuth.js';
+import { useAuthLinkState } from '../hooks/useAuthLinkState.js';
+import './MovieCard.css';
 import './Navbar.css';
 
 const links = [
@@ -12,6 +16,14 @@ const links = [
 ];
 
 function Navbar({ watchlistCount = 0 }) {
+  const { status } = useAuth();
+  const authState = useAuthLinkState();
+
+  const watchlistLink =
+    status === 'authenticated'
+      ? { to: '/watchlist' }
+      : { to: '/login', state: { ...authState, from: { pathname: '/watchlist' } } };
+
   return (
     <header className="navbar">
       <div className="container navbar__inner">
@@ -28,7 +40,7 @@ function Navbar({ watchlistCount = 0 }) {
         <NavbarSearch />
 
         <div className="navbar__actions">
-          <Button to="/watchlist" variant="secondary" className="navbar__watchlist">
+          <Button {...watchlistLink} variant="secondary" className="navbar__watchlist">
             <BookmarkIcon size={18} />
             Watchlist
             {watchlistCount > 0 && (
@@ -38,10 +50,20 @@ function Navbar({ watchlistCount = 0 }) {
 
           <span className="navbar__divider" aria-hidden="true" />
 
-          <Link to="/login" className="navbar__login">
-            Log In
-          </Link>
-          <Button to="/signup">Sign Up</Button>
+          {status === 'authenticated' && <UserMenu />}
+
+          {status === 'loading' && <span className="skeleton navbar__avatar-skeleton" aria-hidden="true" />}
+
+          {status === 'anonymous' && (
+            <>
+              <Link to="/login" state={authState} className="navbar__login">
+                Log In
+              </Link>
+              <Button to="/signup" state={authState}>
+                Sign Up
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </header>

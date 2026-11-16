@@ -103,3 +103,10 @@
         color: var(--color-accent);
     }
 }
+
+.navbar__avatar-skeleton {
+  display: block;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-pill);
+}

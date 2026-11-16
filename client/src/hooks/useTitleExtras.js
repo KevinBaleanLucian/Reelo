@@ -1,35 +1,36 @@
-import { useCallback,useEffect,useState } from "react";
-import { getTitleExtras } from "../services/titleApi.js";
+import { useCallback, useEffect, useState } from 'react';
+import { getTitleExtras } from '../services/titleApi.js';
 
-export function useTitleExtras(type,id,region) {
-    const [attempt, setAttempt]=useState(0);
-    const [result,setResult]= useState({key:null, data:null, failed:false});
+export function useTitleExtras(type, id, region, enabled = true) {
+  const [attempt, setAttempt] = useState(0);
+  const [result, setResult] = useState({ key: null, data: null, failed: false });
 
-    const key= `${type}:${id}:${region ?? ''}:${attempt}`;
+  const key = `${type}:${id}:${region ?? ''}:${attempt}`;
 
-    useEffect(() => {
-        let active=true;
+  useEffect(() => {
+    if (!enabled) return undefined;
 
-        getTitleExtras(type,id,region)
-            .then((data) => {
-                if(active) setResult({key,data,failed: false});
-            })
-            .catch(() => {
-                if(active) setResult({key, data:null,failed:true});
-            });
+    let active = true;
 
-            return () => {
-                active=false;
-            };
-    }, [key,type,id,region]);
+    getTitleExtras(type, id, region)
+      .then((data) => {
+        if (active) setResult({ key, data, failed: false });
+      })
+      .catch(() => {
+        if (active) setResult({ key, data: null, failed: true });
+      });
 
-    const retry=useCallback(() => setAttempt((n) => n+1), []);
+    return () => {
+      active = false;
+    };
+  }, [key, type, id, region, enabled]);
 
-    let status='loading';
-    if(result.key===key){
-        status = result.failed ? 'error' :'ready';
-    }
+  const retry = useCallback(() => setAttempt((n) => n + 1), []);
 
-    return { data: status === 'ready' ? result.data : null, status, retry };
+  let status = 'loading';
+  if (enabled && result.key === key) {
+    status = result.failed ? 'error' : 'ready';
+  }
 
+  return { data: status === 'ready' ? result.data : null, status, retry };
 }

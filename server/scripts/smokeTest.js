@@ -34,6 +34,11 @@ function check(name, condition) {
   }
 }
 
+function lifetimeHours(token) {
+  const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString());
+  return (payload.exp - payload.iat) / 3600;
+}
+
 const stamp = Date.now();
 const user = {
   firstName: 'Smoke',
@@ -84,6 +89,11 @@ try {
   check('Login works with an uppercase email', r.status === 200 && Boolean(r.data.token));
   const token = r.data?.token;
   check('Login response has no hash', !JSON.stringify(r.data).includes('password'));
+  check('Without remember me the token lasts 24 hours', lifetimeHours(token) === 24);
+  r = await call('POST', '/auth/login', {
+    body: { email: user.email, password: user.password, rememberMe: true },
+  });
+  check('Remember me gives a 7-day token', r.status === 200 && lifetimeHours(r.data.token) === 168);
 
   console.log('Me');
   r = await call('GET', '/auth/me');

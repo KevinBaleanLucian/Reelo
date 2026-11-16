@@ -1,0 +1,44 @@
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.auth-form__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.auth-form__title {
+  font-size: var(--text-3xl);
+}
+
+.auth-form__subtitle {
+  color: var(--color-text-secondary);
+}
+
+.auth-form__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.auth-form__error {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-error);
+  border-radius: var(--radius-input);
+  font-size: var(--text-sm);
+  color: var(--color-error);
+}
+
+.auth-form .auth-form__submit {
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+}
+
+.auth-form__switch {
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}

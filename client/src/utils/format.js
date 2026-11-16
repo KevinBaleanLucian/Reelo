@@ -45,3 +45,7 @@ export function formatRegionName(code) {
         return code;
     }
 }
+
+export function genreLabel(name) {
+    return GENRE_LABELS[name] || name;
+}

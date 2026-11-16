@@ -10,6 +10,7 @@ import SimilarTitles from '../components/SimilarTitles.jsx';
 import {useGenreMap} from '../hooks/useGenreMap.js';
 import { useDocumentTitle } from '../hooks/useDocumentTitle.js';
 import { formatYear } from '../utils/format.js';
+import { useAuth } from '../hooks/useAuth.js';
 import './TitleDetailsPage.css';
 
 function PageMessage({ heading, text, children }) {
@@ -36,7 +37,9 @@ function scrollToTrailer() {
 function TitleDetailsPage() {
   const { type, id } = useParams();
   const details = useTitleDetails(type, id);
-  const extras = useTitleExtras(type, id);
+  const {status: authStatus,user}=useAuth();
+  const country = /^[A-Z]{2}$/.test(user?.country ?? '') ? user.country : undefined;
+  const extras = useTitleExtras(type, id, country, authStatus !== 'loading');
   const genreMap=useGenreMap();
 
   let pageTitle = 'Loading…';
