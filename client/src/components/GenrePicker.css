@@ -84,3 +84,9 @@
     background: rgba(244, 243, 236, 0.06);
   }
 }
+
+@media (max-width: 640px) {
+  .genre-chip {
+    min-height: 2.5rem;
+  }
+}

@@ -110,3 +110,27 @@
   height: 2.5rem;
   border-radius: var(--radius-pill);
 }
+
+.navbar .navbar__menu-button {
+  display: none;
+}
+
+.navbar .navbar__menu-button:focus-visible {
+  outline: 2px solid transparent;
+  box-shadow:
+    0 0 0 2px var(--color-bg),
+    0 0 0 4px var(--color-accent);
+}
+
+@media (max-width: 1024px) {
+  .navbar .navbar__links,
+  .navbar .navbar-search,
+  .navbar .navbar__actions {
+    display: none;
+  }
+
+  .navbar .navbar__menu-button {
+    display: flex;
+    margin-left: auto;
+  }
+}

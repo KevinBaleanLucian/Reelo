@@ -34,3 +34,9 @@
     color: var(--color-text);
   }
 }
+
+@media (max-width: 640px) {
+  .breadcrumb__current {
+    max-width: 12rem;
+  }
+}

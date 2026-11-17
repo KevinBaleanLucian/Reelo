@@ -116,9 +116,7 @@
   animation: auth-panel-out 0.2s ease-in forwards;
 }
 
-html.scroll-locked {
-  overflow: hidden;
-}
+
 
 @keyframes auth-backdrop-in {
   from {
@@ -148,5 +146,30 @@ html.scroll-locked {
   .auth-drawer__close:hover,
   .auth-drawer__legal a:hover {
     color: var(--color-text);
+  }
+}
+
+.auth-drawer__panel:focus {
+  outline: none;
+}
+
+@media (max-width: 640px) {
+  .auth-drawer__header {
+    padding-inline: var(--container-padding);
+  }
+
+  .auth-drawer__close {
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-right: -0.5rem;
+  }
+
+  .auth-drawer__body {
+    padding: var(--space-6) var(--container-padding);
+  }
+
+  .auth-drawer__footer {
+    padding: var(--space-4) var(--container-padding)
+      max(var(--space-4), env(safe-area-inset-bottom));
   }
 }

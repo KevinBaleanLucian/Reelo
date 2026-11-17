@@ -10,6 +10,7 @@ function Select({ label, value, onChange, options, placeholder, className = '' }
   const optionId = (index) => `${uid}-option-${index}`;
 
   const rootRef = useRef(null);
+  const listRef=useRef(null);
   const typedRef = useRef({ text: '', timer: null });
   const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -30,6 +31,14 @@ function Select({ label, value, onChange, options, placeholder, className = '' }
 
     document.addEventListener('pointerdown', handlePointerDown);
     return () => document.removeEventListener('pointerdown', handlePointerDown);
+  }, [open]);
+
+  useEffect(() => {
+    const list=listRef.current;
+    if(!open || !list) return;
+
+    const {right} =list.getBoundingClientRect();
+    list.classList.toggle('select__list--right',right > window.innerWidth - 8);
   }, [open]);
 
   useEffect(() => {
@@ -113,7 +122,9 @@ function Select({ label, value, onChange, options, placeholder, className = '' }
 
   function handleClick(event) {
     if (event.detail === 0) return;
-    if (open) setOpen(false);
+    event.currentTarget.focus();
+
+    if(open) setOpen(false);
     else openList();
   }
 
@@ -145,6 +156,7 @@ function Select({ label, value, onChange, options, placeholder, className = '' }
 
       {open && (
         <ul
+          ref={listRef}
           id={listId}
           role="listbox"
           aria-labelledby={labelId}

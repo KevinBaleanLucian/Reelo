@@ -102,3 +102,15 @@
     color: var(--color-text);
   }
 }
+
+@media (max-width: 640px) {
+  .trailer__button {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  .trailer__note {
+    left: var(--space-3);
+    bottom: var(--space-2);
+  }
+}

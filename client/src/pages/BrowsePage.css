@@ -43,3 +43,32 @@
   font-size: var(--text-xs);
   font-weight: 600;
 }
+
+@media (max-width: 1024px) {
+  .browse__panel {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .browse__filters {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+    align-items: end;
+  }
+
+  .browse__filters .select,
+  .browse__panel .select {
+    min-width: 0;
+  }
+
+  .browse__filters > .btn:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+
+  .browse__panel {
+    gap: var(--space-3);
+    padding: var(--space-4);
+  }
+}

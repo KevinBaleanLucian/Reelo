@@ -5,6 +5,7 @@ import MovieCard from './MovieCard.jsx';
 import MovieCardSkeleton from './MovieCardSkeleton.jsx';
 import { ArrowUpRightIcon, ChevronLeftIcon, ChevronRightIcon } from './Icons.jsx';
 import { useCarousel } from '../hooks/useCarousel.js';
+import { useRowColumns } from '../hooks/useRowColumns.js';
 import { useTitleList } from '../hooks/useTitleList.js';
 import './TitleRow.css';
 
@@ -21,11 +22,11 @@ function TitleRow({
   filters,
 }) {
   const headingId = useId();
-  const columns = variant === 'wide' ? 3 : 5;
+  const { columns, pageSize, skeletons } = useRowColumns(variant);
   const loadCount = limit ?? (variant === 'wide' ? 9 : 20);
 
   const { items, status, retry } = useTitleList(source, type, loadCount);
-  const { trackRef, canPrev, canNext, scrollPage } = useCarousel(columns, `${status}:${type}`);
+  const { trackRef, canPrev, canNext, scrollPage } = useCarousel(pageSize, `${status}:${type}`);
 
   return (
     <section className="title-row" aria-labelledby={headingId}>
@@ -87,7 +88,7 @@ function TitleRow({
           aria-busy={status === 'loading'}
         >
           {status === 'loading'
-            ? Array.from({ length: columns }, (_, i) => <MovieCardSkeleton key={i} variant={variant} />)
+            ? Array.from({ length: skeletons }, (_, i) => <MovieCardSkeleton key={i} variant={variant} />)
             : items.map((item) => (
                 <MovieCard
                   key={`${item.mediaType}-${item.tmdbId}`}

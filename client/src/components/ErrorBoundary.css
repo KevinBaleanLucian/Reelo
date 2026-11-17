@@ -1,0 +1,20 @@
+.error-boundary {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+  max-width: 32rem;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin-inline: auto;
+  padding: var(--space-8) var(--container-padding);
+  justify-content: center;
+}
+
+.error-boundary__title {
+  font-size: var(--text-3xl);
+}
+
+.error-boundary__text {
+  color: var(--color-text-secondary);
+}

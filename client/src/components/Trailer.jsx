@@ -23,7 +23,7 @@ function Trailer({trailer,title,backdropPath}) {
                     <iframe
                         ref={frameRef}
                         className="trailer__frame"
-                        src={`https://www.youtube-nocookie.com/embed/${trailer.key}?autoplay=1&rel=0`}
+                        src={`https://www.youtube-nocookie.com/embed/${trailer.key}?autoplay=1&rel=0&playsinline=1`}
                         title={`${title} - ${trailer.name}`}
                         allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
                         allowFullScreen

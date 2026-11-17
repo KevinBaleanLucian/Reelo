@@ -38,3 +38,21 @@
   border-radius: var(--radius-card);
   color: var(--color-text-secondary);
 }
+
+@media (max-width: 1024px) {
+  .title-grid__list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-5) var(--space-4);
+  }
+}
+
+@media (max-width: 640px) {
+  .title-grid__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5) var(--space-3);
+  }
+
+  .title-grid__footer .btn {
+    width: 100%;
+  }
+}

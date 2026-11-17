@@ -1,19 +1,11 @@
 import Button from "./Button.jsx";
 import MovieCard from "./MovieCard.jsx";
 import MovieCardSkeleton from "./MovieCardSkeleton.jsx";
+import { useGridColumns } from "../hooks/useGridColumns.js";
 import './TitleGrid.css';
 
-function TitleGrid({
-    items,
-    status,
-    genreMap,
-    hasMore,
-    loadingMore,
-    moreFailed,
-    onLoadMore,
-    onRetry,
-    emptyMessage = 'Nothing to show yet',
-}) {
+function TitleGrid({items,status,genreMap,hasMore,loadingMore,moreFailed,onLoadMore,onRetry,emptyMessage = 'Nothing to show yet'}) {
+    const columns=useGridColumns();
     if (status ==='error') {
         return (
             <div className="title-grid__message" role="alert">
@@ -28,7 +20,7 @@ function TitleGrid({
     if(status==='loading'){
         return (
             <div className="title-grid__list" aria-busy="true">
-                {Array.from({length:10}, (_,i) => (
+                {Array.from({length:columns*2}, (_,i) => (
                     <MovieCardSkeleton key={i} />
                 ))}
             </div>
@@ -48,7 +40,7 @@ function TitleGrid({
                 ))}
 
                 {loadingMore &&
-                    Array.from({length: 5}, (_,i) => <MovieCardSkeleton key={`more-${i}`} />)}
+                    Array.from({length: columns}, (_,i) => <MovieCardSkeleton key={`more-${i}`} />)}
             </div>
 
             <p className="visually-hidden" role="status" aria-live="polite">

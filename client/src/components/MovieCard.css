@@ -166,3 +166,33 @@
         animation: none;
     }
 }
+
+
+@media (max-width: 640px) {
+  .movie-card {
+    gap: var(--space-2);
+  }
+
+  .movie-card__badge {
+    top: var(--space-2);
+    left: var(--space-2);
+    padding: 0.125rem 0.375rem;
+    font-size: 0.625rem;
+  }
+
+  .movie-card__add {
+    top: var(--space-2);
+    right: var(--space-2);
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .movie-card__title {
+    font-size: var(--text-sm);
+  }
+
+  .movie-card__rating,
+  .movie-card__meta {
+    font-size: var(--text-xs);
+  }
+}

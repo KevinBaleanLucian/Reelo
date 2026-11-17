@@ -1,5 +1,10 @@
+import PlaceholderPage from './PlaceholderPage.jsx';
+import { useDocumentTitle } from '../hooks/useDocumentTitle.js';
+
 function WatchlistPage() {
-  return <h1>WatchlistPage</h1>;
+  useDocumentTitle('Watchlist');
+
+  return <PlaceholderPage title="Watchlist" />;
 }
 
 export default WatchlistPage;

@@ -77,3 +77,43 @@
     gap: var(--space-3);
     margin-top: var(--space-3);
 }
+
+.hero__content .skeleton--line {
+  max-width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .hero__shade {
+    background:
+      linear-gradient(90deg, var(--color-bg) 0%, rgba(12, 13, 13, 0.85) 45%, rgba(12, 13, 13, 0.3) 100%),
+      linear-gradient(0deg, var(--color-bg) 0%, transparent 35%);
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    min-height: 34rem;
+    align-items: flex-end;
+  }
+
+  .hero__shade {
+    background: linear-gradient(
+      0deg,
+      var(--color-bg) 0%,
+      rgba(12, 13, 13, 0.88) 45%,
+      rgba(12, 13, 13, 0.3) 100%
+    );
+  }
+
+  .hero__image {
+    object-position: 60% center;
+  }
+
+  .hero__actions {
+    width: 100%;
+  }
+
+  .hero__actions .btn {
+    flex: 1 1 auto;
+  }
+}

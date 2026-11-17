@@ -5,6 +5,7 @@ import { XIcon } from './Icons.jsx';
 import LoginPage from '../pages/LoginPage.jsx';
 import SignUpPage from '../pages/SignUpPage.jsx';
 import { useAuth } from '../hooks/useAuth.js';
+import { lockScroll } from '../utils/scrollLock.js';
 import './AuthDrawer.css';
 
 const CLOSE_MS = 200;
@@ -24,6 +25,7 @@ function DrawerShell() {
   const location = useLocation();
   const navigate = useNavigate();
   const dialogRef = useRef(null);
+  const panelRef=useRef(null);
   const timerRef = useRef(null);
   const [closing, setClosing] = useState(false);
 
@@ -32,18 +34,26 @@ function DrawerShell() {
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog.open) dialog.showModal();
-    document.documentElement.classList.add('scroll-locked');
+    const unlock = lockScroll();
 
     return () => {
       clearTimeout(timerRef.current);
-      document.documentElement.classList.remove('scroll-locked');
+      unlock();
       if (dialog.open) dialog.close();
     };
   }, []);
 
   useEffect(() => {
-    const field = dialogRef.current?.querySelector('input:not([type="hidden"]), select, textarea');
-    field?.focus();
+    const dialog = dialogRef.current;
+    const touch = window.matchMedia('(pointer: coarse)').matches;
+
+    panelRef.current?.scrollTo({ top: 0 });
+
+    if (touch) {
+      panelRef.current?.focus({ preventScroll: true });
+    } else {
+      dialog?.querySelector('input:not([type="hidden"]), select, textarea')?.focus();
+    }
   }, [location.pathname]);
 
   const requestClose = useCallback(() => {
@@ -72,7 +82,7 @@ function DrawerShell() {
       }}
     >
       <button type="button" className="auth-drawer__backdrop" tabIndex={-1} aria-hidden="true" onClick={requestClose}/>
-      <div className="auth-drawer__panel">
+      <div ref={panelRef} tabIndex={-1} className="auth-drawer__panel">
         <header className="auth-drawer__header">
           <Logo size="sm" />
 

@@ -1,5 +1,10 @@
+import PlaceholderPage from './PlaceholderPage.jsx';
+import { useDocumentTitle } from '../hooks/useDocumentTitle.js';
+
 function ChatPage() {
-  return <h1>ChatPage</h1>;
+  useDocumentTitle('Messages');
+
+  return <PlaceholderPage title="Messages" />;
 }
 
 export default ChatPage;

@@ -1,28 +1,34 @@
-import { Link, NavLink } from 'react-router';
+import { useRef, useState } from 'react';
+import { Link, NavLink, useLocation } from 'react-router';
 import Button from './Button.jsx';
+import { BookmarkIcon, MenuIcon } from './Icons.jsx';
 import Logo from './Logo.jsx';
+import MobileMenu from './MobileMenu.jsx';
 import NavbarSearch from './NavbarSearch.jsx';
 import UserMenu from './UserMenu.jsx';
-import { BookmarkIcon } from './Icons.jsx';
 import { useAuth } from '../hooks/useAuth.js';
 import { useAuthLinkState } from '../hooks/useAuthLinkState.js';
+import { useMediaQuery } from '../hooks/useMediaQuery.js';
+import { useWatchlistLink } from '../hooks/useWatchlistLink.js';
+import { TABLET_QUERY } from '../utils/breakpoints.js';
+import { NAV_LINKS } from '../utils/navLinks.js';
 import './MovieCard.css';
 import './Navbar.css';
-
-const links = [
-  { to: '/', label: 'Discover', end: true },
-  { to: '/movies', label: 'Movies' },
-  { to: '/series', label: 'Series' },
-];
 
 function Navbar({ watchlistCount = 0 }) {
   const { status } = useAuth();
   const authState = useAuthLinkState();
+  const watchlistLink = useWatchlistLink();
+  const location = useLocation();
+  const compact = useMediaQuery(TABLET_QUERY);
+  const menuButtonRef = useRef(null);
+  const [openedAt, setOpenedAt] = useState(null);
 
-  const watchlistLink =
-    status === 'authenticated'
-      ? { to: '/watchlist' }
-      : { to: '/login', state: { ...authState, from: { pathname: '/watchlist' } } };
+  if (openedAt !== null && (openedAt !== location.key || !compact)) {
+    setOpenedAt(null);
+  }
+
+  const menuOpen = openedAt !== null;
 
   return (
     <header className="navbar">
@@ -30,7 +36,7 @@ function Navbar({ watchlistCount = 0 }) {
         <Logo />
 
         <nav className="navbar__links" aria-label="Main">
-          {links.map(({ to, label, end }) => (
+          {NAV_LINKS.map(({ to, label, end }) => (
             <NavLink key={to} to={to} end={end} className="navbar__link">
               {label}
             </NavLink>
@@ -65,7 +71,30 @@ function Navbar({ watchlistCount = 0 }) {
             </>
           )}
         </div>
+
+        <button
+          ref={menuButtonRef}
+          type="button"
+          className="navbar__icon-btn navbar__menu-button"
+          aria-label="Open menu"
+          aria-haspopup="dialog"
+          aria-expanded={menuOpen}
+          onClick={(event) => {
+            event.currentTarget.focus();
+            setOpenedAt(location.key);
+          }}
+        >
+          <MenuIcon size={22} />
+        </button>
       </div>
+
+      {menuOpen && (
+        <MobileMenu
+          watchlistLink={watchlistLink}
+          watchlistCount={watchlistCount}
+          onClose={() => setOpenedAt(null)}
+        />
+      )}
     </header>
   );
 }

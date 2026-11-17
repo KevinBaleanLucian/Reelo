@@ -1,12 +1,10 @@
 import { useEffect,useId,useRef,useState } from "react";
 import { Link } from "react-router";
 import { useAuth } from "../hooks/useAuth.js";
+import { initials } from "../utils/user.js";
 import './UserMenu.css';
 
-function initials(user){
-    const letters= `${user.firstName?.[0] ?? ''}${user.lastName?.[0] ?? ''}`.toUpperCase();
-    return letters || (user.username?.[0] ?? '?').toUpperCase();
-}
+
 
 function UserMenu(){
     const {user,logout}=useAuth();
@@ -54,7 +52,10 @@ function UserMenu(){
                 aria-label="Account menu"
                 aria-expanded={open}
                 aria-controls={open ? panelId : undefined}
-                onClick={() => setOpen((current) => !current)}
+                onClick={(event) => {
+                    event.currentTarget.focus();
+                    setOpen((current) => !current);
+                }}
             >
                 {user.avatarUrl ? (
                     <img src={user.avatarUrl} alt="" className="user-menu__avatar" />

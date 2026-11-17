@@ -5,15 +5,16 @@ import MovieCardSkeleton from './MovieCardSkeleton.jsx';
 import { ArrowUpRightIcon, ChevronLeftIcon, ChevronRightIcon } from './Icons.jsx';
 import { useCarousel } from '../hooks/useCarousel.js';
 import { formatGenreNames } from '../utils/format.js';
+import { useRowColumns } from '../hooks/useRowColumns.js';
 import './TitleRow.css';
 import './SimilarTitles.css';
 
-const COLUMNS = 5;
 
 function SimilarTitles({ title, status, items = [], genreMap }) {
   const headingId = useId();
+  const { columns, pageSize, skeletons } = useRowColumns();
   const { trackRef, canPrev, canNext, scrollPage } = useCarousel(
-    COLUMNS,
+    pageSize,
     `${title.mediaType}-${title.tmdbId}:${status}`
   );
 
@@ -77,11 +78,11 @@ function SimilarTitles({ title, status, items = [], genreMap }) {
       <div
         className="title-row__track"
         ref={trackRef}
-        style={{ '--columns': COLUMNS }}
+        style={{ '--columns': columns }}
         aria-busy={status === 'loading'}
       >
         {status === 'loading'
-          ? Array.from({ length: COLUMNS }, (_, index) => <MovieCardSkeleton key={index} />)
+          ? Array.from({ length: skeletons }, (_, index) => <MovieCardSkeleton key={index} />)
           : items.map((item) => (
               <MovieCard key={`${item.mediaType}-${item.tmdbId}`} item={item} genreMap={genreMap} />
             ))}

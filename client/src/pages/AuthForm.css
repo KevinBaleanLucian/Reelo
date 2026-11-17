@@ -42,3 +42,9 @@
   font-size: var(--text-sm);
   color: var(--color-text-secondary);
 }
+
+@media (max-width: 480px) {
+  .auth-form__row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
