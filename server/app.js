@@ -5,6 +5,7 @@ import healthRoutes from './routes/healthRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import genreRoutes from './routes/genreRoutes.js';
 import titleRoutes from './routes/titleRoutes.js';
+import watchlistRoutes from './routes/watchlistRoutes.js'
 import { notFound, errorHandler } from './middleware/errorHandler.js';
 
 dotenv.config();
@@ -18,6 +19,7 @@ app.use('/api/health',healthRoutes);
 app.use('/api/auth',authRoutes);
 app.use('/api/genres',genreRoutes);
 app.use('/api/titles',titleRoutes);
+app.use('/api/watchlist',watchlistRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
