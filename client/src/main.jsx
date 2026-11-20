@@ -6,14 +6,20 @@ import './index.css'
 import App from './App.jsx'
 import { AuthProvider } from './context/AuthProvider.jsx';
 import ErrorBoundary from './components/ErrorBoundary.jsx';
+import { WatchlistProvider } from './context/WatchlistProvider.jsx';
+import { ToastProvider } from './context/ToastProvider.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ErrorBoundary>
       <BrowserRouter>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
+        <ToastProvider>
+          <AuthProvider>
+            <WatchlistProvider>
+              <App />
+            </WatchlistProvider>
+          </AuthProvider>
+        </ToastProvider>
       </BrowserRouter>
     </ErrorBoundary>
   </StrictMode>,

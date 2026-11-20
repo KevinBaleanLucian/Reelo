@@ -209,3 +209,9 @@
     font-size: var(--text-lg);
   }
 }
+
+.title-hero__actions .title-hero__watchlist--active {
+  background: transparent;
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}

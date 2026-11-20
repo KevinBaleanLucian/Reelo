@@ -12,10 +12,13 @@ import { useMediaQuery } from '../hooks/useMediaQuery.js';
 import { useWatchlistLink } from '../hooks/useWatchlistLink.js';
 import { TABLET_QUERY } from '../utils/breakpoints.js';
 import { NAV_LINKS } from '../utils/navLinks.js';
+import { useWatchlistSummary } from '../hooks/useWatchlist.js';
 import './MovieCard.css';
 import './Navbar.css';
 
-function Navbar({ watchlistCount = 0 }) {
+function Navbar() {
+  const summary=useWatchlistSummary();
+  const watchlistCount=summary?.total ?? 0;
   const { status } = useAuth();
   const authState = useAuthLinkState();
   const watchlistLink = useWatchlistLink();

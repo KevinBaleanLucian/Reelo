@@ -2,9 +2,10 @@ import Button from "./Button.jsx";
 import MovieCard from "./MovieCard.jsx";
 import MovieCardSkeleton from "./MovieCardSkeleton.jsx";
 import { useGridColumns } from "../hooks/useGridColumns.js";
+import { Fragment } from "react";
 import './TitleGrid.css';
 
-function TitleGrid({items,status,genreMap,hasMore,loadingMore,moreFailed,onLoadMore,onRetry,emptyMessage = 'Nothing to show yet'}) {
+function TitleGrid({items,status,genreMap,hasMore,loadingMore,moreFailed,onLoadMore,onRetry,emptyMessage = 'Nothing to show yet',renderItem}) {
     const columns=useGridColumns();
     if (status ==='error') {
         return (
@@ -34,10 +35,15 @@ function TitleGrid({items,status,genreMap,hasMore,loadingMore,moreFailed,onLoadM
     return (
         <div className="title-grid">
             <div className="title-grid__list">
-                {items.map((item)=> (
-                    <MovieCard key={`${item.mediaType}-${item.tmdbId}`} item={item} genreMap={genreMap} />
+                {items.map((item) => {
+                    const key= `${item.mediaType}-${item.tmdbId}`;
 
-                ))}
+                    return renderItem ? (
+                        <Fragment key={key}>{renderItem(item)}</Fragment>
+                    ) : (
+                        <MovieCard key={key} item={item} genreMap={genreMap} />
+                    );
+                })}
 
                 {loadingMore &&
                     Array.from({length: columns}, (_,i) => <MovieCardSkeleton key={`more-${i}`} />)}

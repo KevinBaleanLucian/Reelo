@@ -1,7 +1,8 @@
 import Button from './Button.jsx';
-import { PlusIcon,StarIcon } from './Icons.jsx';
+import { StarIcon } from './Icons.jsx';
 import { backdropUrl } from '../utils/images.js';
 import { formatGenres,formatRating,formatYear } from '../utils/format.js';
+import WatchlistButton from './WatchlistButton.jsx';
 import './Hero.css';
 
 function Hero({item,genreMap}){
@@ -38,11 +39,7 @@ function Hero({item,genreMap}){
 
                 <div className="hero__actions">
                     <Button to={`/title/${item.mediaType}/${item.tmdbId}`}>View details</Button>
-                    <Button variant="secondary" disabled>
-                        <PlusIcon size={18}/>
-                        Add to watchlist
-
-                    </Button>
+                    <WatchlistButton item={item} variant="full" className="btn btn--secondary" />
                 </div>
             </div>
         </section>    

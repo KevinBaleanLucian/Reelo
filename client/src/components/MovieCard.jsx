@@ -1,7 +1,8 @@
 import {Link} from 'react-router';
-import { PlusIcon,StarIcon } from './Icons.jsx';
+import { StarIcon } from './Icons.jsx';
 import { backdropUrl,posterUrl } from '../utils/images.js';
 import { formatGenres,formatRating,formatYear } from '../utils/format.js';
+import WatchlistButton from './WatchlistButton.jsx';
 import './MovieCard.css';
 
 function MovieCard({item,genreMap,variant='poster'}){
@@ -26,9 +27,7 @@ function MovieCard({item,genreMap,variant='poster'}){
 
                 <span className="movie-card__badge">{item.mediaType === 'tv' ? 'Series' : 'Movie'}</span>
 
-                <button type="button" className="movie-card__add" disabled aria-label={`Add ${item.title} to watchlist`}>
-                    <PlusIcon size={16}/>
-                </button>
+                <WatchlistButton item={item} className="movie-card__add" activeClassName="movie-card__add--active"/>
             </div>
 
             <div className="movie-card__info">

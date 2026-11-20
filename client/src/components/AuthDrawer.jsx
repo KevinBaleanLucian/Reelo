@@ -5,6 +5,7 @@ import { XIcon } from './Icons.jsx';
 import LoginPage from '../pages/LoginPage.jsx';
 import SignUpPage from '../pages/SignUpPage.jsx';
 import { useAuth } from '../hooks/useAuth.js';
+import { useWatchlistActions } from '../hooks/useWatchlist.js';
 import { lockScroll } from '../utils/scrollLock.js';
 import './AuthDrawer.css';
 
@@ -112,13 +113,44 @@ function DrawerShell() {
   );
 }
 
+function readPendingWatchlist(value){
+  if(!value || typeof value !=='object') return null;
+
+  const {mediaType,tmdbId,title}=value;
+  const valid =
+    (mediaType === 'movie' || mediaType === 'tv') &&
+    Number.isInteger(tmdbId) &&
+    tmdbId > 0 &&
+    typeof title === 'string' &&
+    title.length > 0 &&
+    title.length <= 300;
+
+  return valid ? {mediaType,tmdbId,title}:null;
+}
+
+function PendingWatchlistAdd({ item }) {
+  const { addAfterLogin } = useWatchlistActions();
+
+  useEffect(() => {
+    if (item) addAfterLogin(item);
+  }, [item, addAfterLogin]);
+
+  return null;
+}
+
 function AuthDrawer() {
   const { status } = useAuth();
   const location = useLocation();
 
   if (status === 'authenticated') {
-    const target = location.state?.from ?? location.state?.background;
-    return <Navigate to={toPath(target)} replace />;
+    const target=location.state?.from ?? location.state?.background;
+    const pending=readPendingWatchlist(location.state?.pendingWatchlist);
+    return (
+      <>
+        {pending && <PendingWatchlistAdd item={pending} />}
+        <Navigate to={toPath(target)} replace />
+      </>
+    );
   }
 
   if (status === 'loading') {

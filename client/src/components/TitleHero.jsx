@@ -1,8 +1,9 @@
 import Breadcrumb from "./Breadcrumb.jsx";
 import Button from "./Button.jsx";
-import { PlayIcon,PlusIcon,StarIcon } from "./Icons.jsx";
+import { PlayIcon,StarIcon } from "./Icons.jsx";
 import { backdropUrl } from "../utils/images.js";
 import { formatGenreNames,formatRating,formatRuntime,formatSeasons,formatYear } from "../utils/format.js";
+import WatchlistButton from "./WatchlistButton.jsx";
 import './TitleHero.css';
 
 function TitleHero({title,tagline,certification,onWatchTrailer}) {
@@ -66,10 +67,12 @@ function TitleHero({title,tagline,certification,onWatchTrailer}) {
                         )}
 
                         <div className="title-hero__actions">
-                            <Button disabled>
-                                <PlusIcon size={18}/>
-                                Add to watchlist
-                            </Button>
+                            <WatchlistButton
+                                item={title}
+                                variant="full"
+                                className="btn btn--primary"
+                                activeClassName="title-hero__watchlist--active"
+                            />
 
                             {onWatchTrailer && (
                                 <Button variant="secondary" onClick={onWatchTrailer}>

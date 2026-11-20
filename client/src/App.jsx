@@ -34,11 +34,13 @@ function App() {
           <Route path="/search" element={<SearchPage />} />
           <Route path="/title/:type/:id" element={<TitleDetailsPage />} />
           <Route path="/profile/:username" element={<ProfilePage />} />
+
+          <Route element={<RequireAuth />}>
+            <Route path="/watchlist" element={<WatchlistPage />} />
+            <Route path="/chat" element={<ChatPage />} />
+          </Route>
+
           <Route path="*" element={<NotFoundPage />} />
-        </Route>
-        <Route element={<RequireAuth />}>
-          <Route path="/watchlist" element={<WatchlistPage />} />
-          <Route path="/chat" element={<ChatPage />} />
         </Route>
       </Routes>
 
