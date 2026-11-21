@@ -1,4 +1,5 @@
 import { TmdbError} from '../utils/tmdb.js';
+import { HttpError } from '../utils/httpError.js';
 
 export function notFound(req,res){
     res.status(404).json({message: 'Route not found'});
@@ -15,6 +16,10 @@ export function errorHandler(err,req,res,next){
 
     if(err.type === 'entity.too.large'){
         return res.status(413).json({message: 'Request body is too large'});
+    }
+
+    if (err instanceof HttpError){
+        return res.status(err.status).json({message: err.message});
     }
 
     if(err instanceof TmdbError){

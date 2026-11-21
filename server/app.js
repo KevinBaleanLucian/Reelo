@@ -6,6 +6,7 @@ import authRoutes from './routes/authRoutes.js';
 import genreRoutes from './routes/genreRoutes.js';
 import titleRoutes from './routes/titleRoutes.js';
 import watchlistRoutes from './routes/watchlistRoutes.js'
+import { reviewRouter, titleReviewRouter } from './routes/reviewRoutes.js';
 import { notFound, errorHandler } from './middleware/errorHandler.js';
 
 dotenv.config();
@@ -18,6 +19,8 @@ app.use(express.json());
 app.use('/api/health',healthRoutes);
 app.use('/api/auth',authRoutes);
 app.use('/api/genres',genreRoutes);
+app.use('/api/titles/:type/:id/reviews', titleReviewRouter);
+app.use('/api/reviews', reviewRouter);
 app.use('/api/titles',titleRoutes);
 app.use('/api/watchlist',watchlistRoutes);
 
